@@ -1,0 +1,22 @@
+#-----------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------
+# mangle rules
+#-----------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------
+
+# pass (don't mangle) traffic NOT FROM capture_if
+sudo iptables -t mangle -I PREROUTING ! -i [%- capture_if -%] -j ACCEPT
+
+#----------------------------------------------------------------------------------------
+# mangle all traffic FROM capture_if
+#----------------------------------------------------------------------------------------
+# now jump to ...
+sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%]                  -j webauth_sessions
+sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%] -m mark --mark 1 -j webauth_activity
+sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%] -m mark --mark 1 -j ACCEPT
+
+# now jump to ...
+sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%]                  -j webauth_open_map
+sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%] -m mark --mark 1 -j ACCEPT
+
+# vim: sw=2 ft=sh

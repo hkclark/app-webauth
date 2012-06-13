@@ -1,0 +1,27 @@
+#-----------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------
+# nat chains handle the rules for a http based captive portal
+#-----------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------
+
+# pass all traffic NOT FROM capture_if
+sudo iptables -t nat -I PREROUTING ! -i [%- capture_if -%] -j ACCEPT
+
+# shortcut marked traffic, don't capture/redirect already marked packets
+sudo iptables -t nat -A PREROUTING -m mark --mark 1 -j ACCEPT
+
+# redirect inbound non-auth web traffic to redirect chain
+sudo iptables -t nat -A PREROUTING -i [%- capture_if -%] \
+  -p tcp -m multiport --dports [%- capture_ports.join(',') -%] \
+  -j  REDIRECT --to-port [%- redirect_port -%]
+
+[% IF capture_ports_ssl %]
+  [% UNLESS redirect_port_ssl; THROW 'redirect_port_ssl undefined in config_hash'; END %]
+
+  sudo iptables -t nat -A PREROUTING -i [%- capture_if -%] \
+    -p tcp -m multiport --dports [%- capture_ports_ssl.join(',') -%] \
+    -j  REDIRECT --to-port [%- redirect_port_ssl -%]
+
+[% END %]
+
+# vim: sw=2 ft=sh

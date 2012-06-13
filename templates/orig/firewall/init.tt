@@ -1,0 +1,60 @@
+####################################
+# create the webauth firewall chains
+####################################
+ 
+#-----------------------------------------------------------------------------------------
+# chain to mark authenticated traffic, clients get dynamically inserted/removed
+# first rule always checks if already MARKed
+#-----------------------------------------------------------------------------------------
+
+[% UNLESS ipset_version; THROW 'ipset_version undefined in config_hash'; END %]
+
+[% IF ipset_version >= 4 %]
+  sudo ipset --create webauth_sessions_ipset hash:ip
+[% ELSE %]
+  sudo ipset --create webauth_sessions_ipset iphash
+[% END %]
+
+sudo iptables -t mangle -N webauth_sessions
+
+# mark packets from authenticated clients ip as auth
+sudo iptables -t mangle -A webauth_sessions -m set --match-set webauth_sessions_ipset src -j MARK --set-mark 1
+
+#-----------------------------------------------------------------------------------------
+# chain to register all outgoing traffic with ip for IDLE checks by purger
+#-----------------------------------------------------------------------------------------
+[% IF ipset_version >= 4 %]
+  sudo ipset --create webauth_activity_ipset      hash:ip
+  sudo ipset --create webauth_activity_swap_ipset hash:ip
+[% ELSE %]
+  sudo ipset --create webauth_activity_ipset      iphash
+  sudo ipset --create webauth_activity_swap_ipset iphash
+[% END %]
+
+sudo iptables -t mangle -N webauth_activity
+
+# first test ip, else set active client ip in activity ipset
+sudo iptables -t mangle -A webauth_activity -m set --match-set webauth_activity_ipset src -j RETURN
+sudo iptables -t mangle -A webauth_activity -j SET --add-set webauth_activity_ipset src
+
+#-------------------------------------------------------------------------------------------
+# allow defined open clients
+#-------------------------------------------------------------------------------------------
+
+[% IF ipset_version >= 4 %]
+  sudo ipset --create webauth_open_map_ipset hash:net
+[% ELSE %]
+  sudo ipset --create webauth_open_map_ipset iptreemap
+[% END %]
+
+sudo iptables -t mangle -N webauth_open_map
+sudo iptables -t mangle -A webauth_open_map -m set --match-set webauth_open_map_ipset dst -j MARK --set-mark 1
+
+[% UNLESS open_clients; THROW 'open_clients undefined in config_file'; END %]
+
+[% FOREACH network IN open_clients %]
+  sudo ipset --add webauth_open_map_ipset [%- network -%]
+[% END %]
+
+# vim: sw=2 ft=sh
+
