@@ -83,7 +83,7 @@ else {
 
 =item B<--file> webauth.cfg
 
-Captive::Portal config file. By default
+App::Webauth config file. By default
 
     $ENV{APP_WEBAUTH_CONFIG} ||
     $Bin/../etc/local/config.pl ||
@@ -171,11 +171,11 @@ pod2usage(
 ) unless ( exists $actions->{$action} );
 
 #####################################################################
-# create Captive::Portal object and run the requested ACTION
+# create App::Webauth object and run the requested ACTION
 #####################################################################
 
-DEBUG "create new Captive Portal object";
-my $webauth = Captive::Portal->new( cfg_file => $cfg_file );
+DEBUG "create new Webauth object";
+my $webauth = App::Webauth->new( cfg_file => $cfg_file );
 
 my $lock_file = $webauth->cfg->{LOCK_FILE};
 
@@ -195,7 +195,7 @@ sub start_fw {
     my $webauth = shift;
 
     # try 30s to get the lock or die
-    my $lock_handle = Captive::Portal::LockHandle->new(
+    my $lock_handle = App::Webauth::LockHandle->new(
         file     => $lock_file,
         shared   => 0,
         blocking => 1,
@@ -212,7 +212,7 @@ sub stop_fw {
     my $webauth = shift;
 
     # try 30s to get the lock or die
-    my $lock_handle = Captive::Portal::LockHandle->new(
+    my $lock_handle = App::Webauth::LockHandle->new(
         file     => $lock_file,
         shared   => 0,
         blocking => 1,
@@ -229,7 +229,7 @@ sub start_clear_fw {
     my $webauth = shift;
 
     # try 30s to get the lock or die
-    my $lock_handle = Captive::Portal::LockHandle->new(
+    my $lock_handle = App::Webauth::LockHandle->new(
         file     => $lock_file,
         shared   => 0,
         blocking => 1,
@@ -252,7 +252,7 @@ sub purge_sessions {
 
     if ( defined $webauth->fw_status ) {
 
-        my $lock_handle = Captive::Portal::LockHandle->new(
+        my $lock_handle = App::Webauth::LockHandle->new(
             file     => $lock_file,
             shared   => 0,
             blocking => 0,

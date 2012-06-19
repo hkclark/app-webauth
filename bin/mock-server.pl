@@ -45,11 +45,11 @@ $ENV{PATH} = '/sbin:/bin:/usr/sbin:/usr/bin';
 $0 = $Script;
 
 my $cfg_file =
-     $ENV{CAPTIVE_PORTAL_CONFIG}
+     $ENV{APP_WEBAUTH_CONFIG}
   || -e "$Bin/../etc/local/config.pl" && "$Bin/../etc/local/config.pl"
   || -e "$Bin/../etc/config.pl" && "$Bin/../etc/config.pl";
 
-my $log4perl = $ENV{CAPTIVE_PORTAL_LOG4PERL}
+my $log4perl = $ENV{APP_WEBAUTH_CONFIG}
   || -e "$Bin/../etc/local/log4perl.conf"
   && "$Bin/../etc/local/log4perl.conf"
   || -e "$Bin/../etc/log4perl.conf" && "$Bin/../etc/log4perl.conf";
@@ -69,7 +69,7 @@ else {
 my $url = shift;
 usage('url missing')   unless $url;
 
-DEBUG "create new Captive Portal object";
+DEBUG "create new Webauth object";
 my $webauth = App::Webauth->new( cfg_file => $cfg_file );
 
 my $mech = WWW::Mechanize::CGI->new;

@@ -50,7 +50,7 @@ uulmfiles
 \.swp$
 
 # Avoid archives of this distribution
-\bCaptive-Portal-[\d\.\_]+
+\bApp-Webauth-[\d\.\_]+
 Debian_CPANTS.txt
 
 # Avoid local test files
