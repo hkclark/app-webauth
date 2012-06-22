@@ -149,3 +149,5 @@ Foundation; either version 2, or (at your option) any later version, or
 b) the Artistic License version 2.0.
 
 =cut
+
+# vim: filetype=perl sw=4
