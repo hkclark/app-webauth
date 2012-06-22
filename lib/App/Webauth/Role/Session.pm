@@ -9,7 +9,7 @@ App::Webauth::Role::Session - session methods for App::Webauth
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Log::Log4perl qw(:easy);
 use JSON qw();

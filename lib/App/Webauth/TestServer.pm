@@ -9,7 +9,7 @@ App::Webauth::TestServer - simple HTTP Server for App::Webauth tests
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use parent 'HTTP::Server::Simple::CGI';
 use HTTP::Server::Simple::Static qw(serve_static);

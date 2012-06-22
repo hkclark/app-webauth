@@ -9,7 +9,7 @@ App::Webauth::Role::I18N - utils for internationalization
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Log::Log4perl qw(:easy);
 use Scalar::Util qw(looks_like_number);
