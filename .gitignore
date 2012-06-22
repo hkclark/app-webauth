@@ -5,7 +5,6 @@ tmp*
 blib*
 Makefile*
 MANIFEST
-README
 !.*/local/.*/README
 MANIFEST.bak
 Build
