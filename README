@@ -2,7 +2,9 @@ NAME
     App::Webauth - TODO
 
 ABSTRACT
-    TODO
+    Protect a network (servers, etc.) from incoming Internet requests unless
+    users can pass authentication via a web page.  Sort of like a
+    "Captive::Portal in reverse".
 
 DESCRIPTION
     TODO
