@@ -56,3 +56,4 @@ Debian_CPANTS.txt
 # Avoid local test files
 t/kwalitee.t
 
+^MYMETA\.json$
