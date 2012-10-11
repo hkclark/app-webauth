@@ -67,5 +67,5 @@ $template = 'firewall/nat.tt';
 is( $webauth->{template}->process( $template, $tmpl_vars, \$cmds ), undef,
     "rendering $template without redirect_port_ssl throws error" );
 
-done_testing(15);
+done_testing();
 
