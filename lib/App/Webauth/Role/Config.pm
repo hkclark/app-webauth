@@ -134,7 +134,9 @@ The above settings result in NAT rules equivalent to:
  iptables -t nat -A PREROUTING -i eth0 -p tcp -m multiport --dports  80 -j REDIRECT --to-port 8080
  iptables -t nat -A PREROUTING -i eth0 -p tcp -m multiport --dports 443 -j REDIRECT --to-port 4433
 
-=item IPTABLES->open_clients
+=item IPTABLES->inbound_open_dest_addrs
+
+=item IPTABLES->inbound_open_src_addrs
 
 Allow access from some clients/ranges/networks without authentication.
 

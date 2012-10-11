@@ -50,10 +50,16 @@ is( $webauth->{template}->process( $template, $tmpl_vars, \$cmds ), undef,
     "rendering $template without ipset_version throws error" );
 
 $tmpl_vars = { %{ $webauth->cfg->{IPTABLES} }, ipv4_aton => $webauth->can('ipv4_aton'), };
-delete $tmpl_vars->{open_clients};
+delete $tmpl_vars->{inbound_open_dest_addrs};
 $template = 'firewall/init.tt';
 is( $webauth->{template}->process( $template, $tmpl_vars, \$cmds ), undef,
-    "rendering $template without open_clients throws error" );
+    "rendering $template without inbound_open_dest_addrs throws error" );
+
+$tmpl_vars = { %{ $webauth->cfg->{IPTABLES} }, ipv4_aton => $webauth->can('ipv4_aton'), };
+delete $tmpl_vars->{inbound_open_src_addrs};
+$template = 'firewall/init.tt';
+is( $webauth->{template}->process( $template, $tmpl_vars, \$cmds ), undef,
+    "rendering $template without inbound_open_src_addrs throws error" );
 
 $tmpl_vars = { %{ $webauth->cfg->{IPTABLES} }, ipv4_aton => $webauth->can('ipv4_aton'), };
 delete $tmpl_vars->{redirect_port_ssl};

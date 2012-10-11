@@ -19,7 +19,8 @@ return {
         redirect_port     => 8080,
         redirect_port_ssl => 4433,
 
-        open_clients => [],
+        inbound_open_dest_addrs => [],
+        inbound_open_src_addrs  => [],
       },
 
     I18N_LANGUAGES     => [ 'en', ],

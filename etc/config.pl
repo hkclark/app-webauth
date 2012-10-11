@@ -71,20 +71,30 @@ return {
         redirect_port     => 8080,
         redirect_port_ssl => 4433,
 
-	# Allow following clients/ranges/networks without authentication
-	#
-	# As input entry, you can add IP addresses,
-	# CIDR blocks or network ranges to the ipset.
-	#
-	# CIDR blocks must be specified with all four octets,
-	# e.g. 10.10.0.0/16, don't abbreviate it to 10.10/16! ( it's a bug in ipset(8) )
-	# Network ranges can be specified in the format IP1-IP2, e.g. 192.168.1.3-192.168.1.19
+        # Allow following clients/ranges/networks without authentication based on either
+        # source or destination address.
+        #
+        # NOTE: SOURCE AND DESTINATION ARE RELATIVE TO TRAFFIC THAT IS FLOWING INBOUND
+        # TO THE OUTSIDE, INTERNET-FACING INTERFACE ("inbound" = traveling from the
+        # Internet toward the servers located behind the WebAuth device)
+        #
+        # As input entry, you can add IP addresses,
+        # CIDR blocks or network ranges to the ipset.
+        #
+        # CIDR blocks must be specified with all four octets,
+        # e.g. 10.10.0.0/16, don't abbreviate it to 10.10/16! ( it's a bug in ipset(8) )
+        # Network ranges can be specified in the format IP1-IP2, e.g. 192.168.1.3-192.168.1.19
 
-        open_clients => [
-            '192.168.0.1',
-            '192.168.3.7-192.168.3.49',
-            '10.10.0.0/16',
-
+        inbound_open_dest_addrs => [
+            #'192.168.0.1',
+            #'192.168.3.7-192.168.3.49',
+            #'10.10.0.0/16',
+            # ...
+        ],
+        inbound_open_src_addrs => [
+            #'192.168.0.1',
+            #'192.168.3.7-192.168.3.49',
+            #'10.10.0.0/16',
             # ...
         ],
       },

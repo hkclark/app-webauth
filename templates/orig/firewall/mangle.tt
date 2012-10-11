@@ -16,7 +16,8 @@ sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%] -m mark --mark 1 -j 
 sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%] -m mark --mark 1 -j ACCEPT
 
 # now jump to ...
-sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%]                  -j webauth_open_map
+sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%]                  -j webauth_open_dest_map
+sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%]                  -j webauth_open_src_map
 sudo iptables -t mangle -A PREROUTING -i [%- capture_if -%] -m mark --mark 1 -j ACCEPT
 
 # vim: sw=2 ft=sh
