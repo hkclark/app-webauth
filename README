@@ -1,0 +1,91 @@
+NAME
+    App::Webauth - TODO
+
+ABSTRACT
+    TODO
+
+DESCRIPTION
+    TODO
+
+ALGORITHM IN SHORT
+    TODO
+
+INSTALLATION
+    Please see the INSTALL file in this distribution. As a minimum please be
+    aware of the following access restrictions:
+
+    App::Webauth needs access to iptables(8) and ipset(8) to change the
+    firewall-rules on request. You must add the following rule (or similar)
+    to the sudoers file, depending on the username of your http daemon:
+
+     WWW_USER ALL=NOPASSWD: /PATH/TO/iptables, /PATH/TO/ipset
+
+    The default $SESSIONS_DIR is set to '/var/cache/webauth'.
+
+    WWW_USER must be the owner of this dir with write permissions!
+
+CONFIGURATION
+    The configuration file is searched in the following default places:
+
+        $ENV{APP_WEBAUTH_CONFIG} ||
+        $Bin/../etc/local/config.pl ||
+        $Bin/../etc/config.pl
+
+LOGGING
+    Logging is handled by the Log::Log4perl module. The logging
+    configuration is searched in the following default places:
+
+        $ENV{APP_WEBAUTH_LOG4PERL}   ||
+        $Bin/../etc/local/log4perl.conf ||
+        $Bin/../etc/log4perl.conf
+
+LOCAL ADAPTATION
+    The HTML files are generated from templates (Template-Toolkit syntax).
+    You should use the original template files as stanzas and put the
+    locally changed versions into the local template tree. The template
+    search order prefers the local templates.
+
+    The CSS is based on the wonderful blueprint css framework, see
+    <http://www.blueprintcss.org/>. Of course you may use your own styles if
+    needed.
+
+    The firewall rules and commands are also generated from template files.
+    Normally there is no need to change the firewall rules but it would be
+    possible to add some local needed additional rules without changing the
+    perl code. Be careful, you must understand the algorithm and the
+    different states. Best you ask the author for any modifications.
+
+I18N
+    There exists a template tree for each supported language. Some
+    system/error messages used by the program must also be translated for
+    the message catalog in the config file.
+
+SEE ALSO
+    App::Webauth::Role::Config, webauth.fcgi and webauth-ctl.pl
+
+CREDITS
+    TODO
+
+BUGS AND LIMITATIONS
+    There are no known problems with this module.
+
+    Please report any bugs or feature requests to "bug-app-webauth at
+    rt.cpan.org", or through the web interface at
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-Webauth>. I will be
+    notified, and then you'll automatically be notified of progress on your
+    bug as I make changes.
+
+AUTHOR
+    Karl Gaissmaier, "<gaissmai at cpan.org>", TODO HKC
+
+LICENSE AND COPYRIGHT
+    Copyright 2012 Karl Gaissmaier, all rights reserved.
+
+    This distribution is free software; you can redistribute it and/or
+    modify it under the terms of either:
+
+    a) the GNU General Public License as published by the Free Software
+    Foundation; either version 2, or (at your option) any later version, or
+
+    b) the Artistic License version 2.0.
+

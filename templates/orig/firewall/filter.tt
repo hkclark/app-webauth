@@ -1,0 +1,29 @@
+#----------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------
+# filter chains
+#----------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------
+# FORWARD chain
+#
+
+# forward outgoing traffic
+sudo iptables -t filter -A FORWARD ! -i [%- capture_if -%] -j ACCEPT
+
+# forward all marked traffic from the clients
+sudo iptables -t filter -A FORWARD -i [%- capture_if -%] -m mark --mark 1 -j ACCEPT
+
+# allow return traffic for outbound-initiated connections for TCP and DNS UDP
+# Note: May need to add others here depending on needs
+sudo iptables -t filter -A FORWARD -i [%- capture_if -%] -m state --state ESTABLISHED,RELATED -p tcp -j ACCEPT
+sudo iptables -t filter -A FORWARD -i [%- capture_if -%] -m state --state ESTABLISHED,RELATED -p udp --sport 53 -j ACCEPT
+
+
+# speed up tcp connections by negative responses
+sudo iptables -t filter -A FORWARD -i [%- capture_if -%] -p tcp -j REJECT --reject-with tcp-reset
+
+# REJECT ALL other
+sudo iptables -t filter -A FORWARD -i [%- capture_if -%] -j REJECT --reject-with icmp-net-prohibited
+
+# vim: sw=2 ft=sh

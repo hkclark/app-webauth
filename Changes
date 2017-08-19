@@ -1,0 +1,8 @@
+Revision history for App::Webauth
+
+0.02	Fri, 22 Jun 2012 13:32:31 +0200
+	* fixed more references to capo
+
+0.01	Tue, 12 Jun 2012 13:49:43 +0200
+	* initial clone from Captive::Portal 3.16
+

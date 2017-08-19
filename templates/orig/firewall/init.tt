@@ -1,0 +1,79 @@
+####################################
+# create the webauth firewall chains
+####################################
+ 
+#-----------------------------------------------------------------------------------------
+# chain to mark authenticated traffic, clients get dynamically inserted/removed
+# first rule always checks if already MARKed
+#-----------------------------------------------------------------------------------------
+
+[% UNLESS ipset_version; THROW 'ipset_version undefined in config_hash'; END %]
+
+[% IF ipset_version >= 4 %]
+  sudo ipset --create webauth_sessions_ipset hash:ip
+[% ELSE %]
+  sudo ipset --create webauth_sessions_ipset iphash
+[% END %]
+
+sudo iptables -t mangle -N webauth_sessions
+
+# mark packets from authenticated clients ip as auth
+sudo iptables -t mangle -A webauth_sessions -m set --match-set webauth_sessions_ipset src -j MARK --set-mark 1
+
+#-----------------------------------------------------------------------------------------
+# chain to register all outgoing traffic with ip for IDLE checks by purger
+#-----------------------------------------------------------------------------------------
+[% IF ipset_version >= 4 %]
+  sudo ipset --create webauth_activity_ipset      hash:ip
+  sudo ipset --create webauth_activity_swap_ipset hash:ip
+[% ELSE %]
+  sudo ipset --create webauth_activity_ipset      iphash
+  sudo ipset --create webauth_activity_swap_ipset iphash
+[% END %]
+
+sudo iptables -t mangle -N webauth_activity
+
+# first test ip, else set active client ip in activity ipset
+sudo iptables -t mangle -A webauth_activity -m set --match-set webauth_activity_ipset src -j RETURN
+sudo iptables -t mangle -A webauth_activity -j SET --add-set webauth_activity_ipset src
+
+#-------------------------------------------------------------------------------------------
+# allow defined inbound destination addresses
+#-------------------------------------------------------------------------------------------
+
+[% IF ipset_version >= 4 %]
+  sudo ipset --create webauth_open_dest_map_ipset hash:net
+[% ELSE %]
+  sudo ipset --create webauth_open_dest_map_ipset iptreemap
+[% END %]
+
+sudo iptables -t mangle -N webauth_open_dest_map
+sudo iptables -t mangle -A webauth_open_dest_map -m set --match-set webauth_open_dest_map_ipset dst -j MARK --set-mark 1
+
+[% UNLESS inbound_open_dest_addrs; THROW 'inbound_open_dest_addrs undefined in config_file'; END %]
+
+[% FOREACH network IN inbound_open_dest_addrs %]
+  sudo ipset --add webauth_open_dest_map_ipset [%- network -%]
+[% END %]
+
+#-------------------------------------------------------------------------------------------
+# allow defined inbound source addresses
+#-------------------------------------------------------------------------------------------
+
+[% IF ipset_version >= 4 %]
+  sudo ipset --create webauth_open_src_map_ipset hash:net
+[% ELSE %]
+  sudo ipset --create webauth_open_src_map_ipset iptreemap
+[% END %]
+
+sudo iptables -t mangle -N webauth_open_src_map
+sudo iptables -t mangle -A webauth_open_src_map -m set --match-set webauth_open_src_map_ipset src -j MARK --set-mark 1
+
+[% UNLESS inbound_open_src_addrs; THROW 'inbound_open_src_addrs undefined in config_file'; END %]
+
+[% FOREACH network IN inbound_open_src_addrs %]
+  sudo ipset --add webauth_open_src_map_ipset [%- network -%]
+[% END %]
+
+# vim: sw=2 ft=sh
+

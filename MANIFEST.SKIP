@@ -1,0 +1,59 @@
+# Avoid uulm files
+uulmfiles
+^presentations
+
+# Avoid development and test files
+^etc/lighttpd.conf
+^tmp
+^priv
+^logs
+^t/sessions
+^test-*
+^nytprof
+^MYMETA.yml$
+^perltidy*
+
+# Avoid version control files.
+\bRCS\b
+\bCVS\b
+,v$
+\B\.svn\b
+\B\.cvsignore$
+\B\.git\b
+\B\.gitignore$
+
+# Avoid Makemaker generated and utility files.
+\bMakefile$
+\bblib
+\bMakeMaker-\d
+\bpm_to_blib$
+\bblibdirs$
+^MANIFEST\.SKIP$
+
+# Avoid Module::Build generated and utility files.
+\bBuild$
+\bBuild.bat$
+\b_build
+\bMakefile*
+
+# Avoid Devel::Cover generated files
+\bcover_db
+
+# Avoid temp and backup files.
+~$
+\.tmp$
+\.old$
+\.bak$
+\#$
+\.#
+\.rej$
+\.swp$
+
+# Avoid archives of this distribution
+\bApp-Webauth-[\d\.\_]+
+Debian_CPANTS.txt
+
+# Avoid local test files
+t/kwalitee.t
+
+^MYMETA\.json$
